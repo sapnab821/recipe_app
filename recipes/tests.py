@@ -54,3 +54,41 @@ class RecipeModelTest(TestCase):
 
         # compare the value to the expected result
         self.assertIsInstance(cooking_time_value, int)
+
+
+    def test_difficulty_max_length(self):
+        # Verifies the difficulty field's maximum length is correctly set.
+        max_length = self.recipe._meta.get_field('difficulty').max_length
+        self.assertEqual(max_length, 20)
+
+    def test_string_representation(self):
+        # Tests the string representation of a Recipe object to ensure it returns its name.
+        self.assertEqual(str(self.recipe), self.recipe.name)
+    
+    def test_return_ingredients_as_list(self):
+        # Confirms ingredients stored as a string are correctly converted to a list.
+        ingredients_list = self.recipe.return_ingredients_as_list()
+        self.assertEqual(len(ingredients_list), 3)
+    
+    def test_calculate_difficulty(self):
+        # Tests the logic that calculates a recipe's difficulty based on cooking time and ingredient count.
+        self.recipe.cooking_time = 5
+        self.recipe.ingredients = 'Ingredient1,Ingredient2'
+        self.recipe.save()
+        self.assertEqual(self.recipe.difficulty, 'Easy')
+    
+        self.recipe.cooking_time = 15
+        self.recipe.ingredients = 'Ingredient1,Ingredient2,Ingredient3,Ingredient4'
+        self.recipe.save()
+        self.assertEqual(self.recipe.difficulty, 'Hard')
+        
+    def test_save_method_override(self):
+        # Checks if the save method correctly sets the difficulty level based on cooking time and ingredients.
+        self.recipe.cooking_time = 20
+        self.recipe.ingredients = 'Ingredient1,Ingredient2,Ingredient3'
+        self.recipe.save()
+        self.assertEqual(self.recipe.difficulty, 'Intermediate')
+    
+    def test_default_image_path(self):
+        # Verifies that the default path for a recipe's image is correctly set.
+        self.assertEqual(self.recipe.pic, 'no_picture')

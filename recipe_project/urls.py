@@ -15,11 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.urls import include
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
+    path('', include('recipes.urls')),  # Root URL uses the recipes app
     path('admin/', admin.site.urls),
-    path('', include('recipes.urls'))
+    path('recipes/', include('recipes.urls')),  # /recipes/ also uses the recipes app
 ]
 
+# Serve media files through Django during development.
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
