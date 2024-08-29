@@ -18,11 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import login_view, logout_view
 
 urlpatterns = [
-    path('', include('recipes.urls')),  # Root URL uses the recipes app
+    path('', include('recipes.urls'), name="recipes"),  # Root URL uses the recipes app
     path('admin/', admin.site.urls),
     path('recipes/', include('recipes.urls')),  # /recipes/ also uses the recipes app
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout')
 ]
 
 # Serve media files through Django during development.

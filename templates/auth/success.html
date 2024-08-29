@@ -1,0 +1,24 @@
+{% load static %} 
+ 
+ <!-- Container with logout message and re-login option -->
+ <div class="flex-container">
+    <div class="center-div">
+        <h1 class="main-header-login">Thanks for visiting!</h1>
+        <div class="login-container logout-specific">
+            <div class="top-notch"></div>
+
+            <div class="logout-side-message">
+                <div class="logout-top-message">
+                    <h2 class="logout-message">You have been successfully logged out</h2>
+                    <p class="logout-submessage">We will see you next time!</p>
+                </div>
+                <div>
+                    <p class="re-log-message">Logged out by mistake? Log back in to continue</p>
+                    <div class="button-holder">
+                        <a href="{%url 'login' %}" class="login-button-onlogout">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
