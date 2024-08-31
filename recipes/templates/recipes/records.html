@@ -1,0 +1,25 @@
+
+{% load static %}
+<h1> Search for sales records</h1>
+
+<hr>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{form}}
+    <button type="submit" >search</button>
+
+</form>
+
+
+<br>
+
+{% if name_df %}
+    {{ name_df|safe }}
+    
+    <br>
+    <h2><a href="{{ recipe.get_absolute_url }}">{{ recipe.name }}</a></a></h2>
+    <img src="/media/{{ recipe.pic }}" />
+    <img src="data:image/png;base64,{{ chart }}" alt="Chart">
+{% else %}
+   
+{% endif %}

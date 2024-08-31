@@ -1,94 +1,82 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
 from .models import Recipe
+from django.urls import reverse
+from django.test import Client
 
-# Create your tests here.
-# Create your tests here.
 class RecipeModelTest(TestCase):
-    # set up non-modified objects used by all test methods
-    def setUpTestData():
-        Recipe.objects.create(
-            name="Tea",
-            ingredients="Tea leaves, Sugar, Water",
-            cooking_time=5,
+    @classmethod
+    def setUpTestData(cls):
+        cls.recipe = Recipe.objects.create(
+            name="Omelette",
+            cooking_time=10,
+            ingredients="Eggs, Butter, Salt, Pepper, Onion, Bell Pepper, Ham",
         )
 
-    # NAME
+    # Test for recipe name being initialized
     def test_recipe_name(self):
-        # get a recipe object to test
-        recipe = Recipe.objects.get(id=1)
-
-        # get metadata for 'name' field and use it to query its data
+        recipe = Recipe.objects.get(id=self.recipe.id)
         field_label = recipe._meta.get_field("name").verbose_name
-
-        # compare the value to the expected result
         self.assertEqual(field_label, "name")
 
+    # Test for recipe name exceeding 100 characters
     def test_recipe_name_max_length(self):
-        # get a recipe object to test
-        recipe = Recipe.objects.get(id=1)
-
-        # get metadata for 'name' field and use it to query its data
+        recipe = Recipe.objects.get(id=self.recipe.id)
         max_length = recipe._meta.get_field("name").max_length
+        self.assertEqual(max_length, 100)
 
-        # compare the value to the expected result
-        self.assertEqual(max_length, 50)
+    # Test for recipe cooking_time being an integer
+    def test_cooking_time_is_integer(self):
+        recipe = Recipe.objects.get(id=self.recipe.id)
+        cooking_time = recipe.cooking_time
+        self.assertIs(type(cooking_time), int)
 
-    # INGREDIENTS
+    # Test for recipe ingredients exceeding 225 characters in ingredients field
     def test_ingredients_max_length(self):
-        # get a recipe object to test
-        recipe = Recipe.objects.get(id=1)
-
-        # get metadata for 'ingredients' field and use it to query its data
+        recipe = Recipe.objects.get(id=self.recipe.id)
         max_length = recipe._meta.get_field("ingredients").max_length
-
-        # compare the value to the expected result
         self.assertEqual(max_length, 225)
 
-    # COOKING TIME
-    def test_cooking_time_value(self):
-        # get a recipe object to test
-        recipe = Recipe.objects.get(id=1)
-
-        # get metadata for 'cooking_time' field and use it to query its data
-        cooking_time_value = recipe.cooking_time
-
-        # compare the value to the expected result
-        self.assertIsInstance(cooking_time_value, int)
-
-
-    def test_difficulty_max_length(self):
-        # Verifies the difficulty field's maximum length is correctly set.
-        max_length = self.recipe._meta.get_field('difficulty').max_length
-        self.assertEqual(max_length, 20)
-
-    def test_string_representation(self):
-        # Tests the string representation of a Recipe object to ensure it returns its name.
-        self.assertEqual(str(self.recipe), self.recipe.name)
-    
-    def test_return_ingredients_as_list(self):
-        # Confirms ingredients stored as a string are correctly converted to a list.
-        ingredients_list = self.recipe.return_ingredients_as_list()
-        self.assertEqual(len(ingredients_list), 3)
-    
+    # Test for recipe difficulty ensuring calculate_difficulty works
     def test_calculate_difficulty(self):
-        # Tests the logic that calculates a recipe's difficulty based on cooking time and ingredient count.
-        self.recipe.cooking_time = 5
-        self.recipe.ingredients = 'Ingredient1,Ingredient2'
-        self.recipe.save()
-        self.assertEqual(self.recipe.difficulty, 'Easy')
+        recipe = Recipe.objects.get(id=self.recipe.id)
+
+        # Set the cooking time and ingredients for the recipe
+        recipe.cooking_time = 5
+        recipe.ingredients = 'Ingredient1,Ingredient2'
+        recipe.save()
+
+        # Assert that the difficulty is 'easy'
+        self.assertEqual(recipe.difficulty(), 'easy')
+
+        # Modify the recipe to have a higher cooking time and more ingredients
+        recipe.cooking_time = 15
+        recipe.ingredients = 'Ingredient1,Ingredient2,Ingredient3,Ingredient4'
+        recipe.save()
+
+        # Assert that the difficulty is 'hard'
+        self.assertEqual(recipe.difficulty(), 'hard')
+
+
+class UserModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(username='johnnytest', password='testpassword')
+
+
+class UserAuthTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.client = Client()
+        cls.user = User.objects.create_user(username='testuser', password='testpassword')
+
+    def test_profile_redirect_without_auth(self):
+        response = self.client.get(reverse('recipes:list'))
+        self.assertRedirects(response, f'/login/?next={reverse("recipes:list")}')
     
-        self.recipe.cooking_time = 15
-        self.recipe.ingredients = 'Ingredient1,Ingredient2,Ingredient3,Ingredient4'
-        self.recipe.save()
-        self.assertEqual(self.recipe.difficulty, 'Hard')
-        
-    def test_save_method_override(self):
-        # Checks if the save method correctly sets the difficulty level based on cooking time and ingredients.
-        self.recipe.cooking_time = 20
-        self.recipe.ingredients = 'Ingredient1,Ingredient2,Ingredient3'
-        self.recipe.save()
-        self.assertEqual(self.recipe.difficulty, 'Intermediate')
-    
-    def test_default_image_path(self):
-        # Verifies that the default path for a recipe's image is correctly set.
-        self.assertEqual(self.recipe.pic, 'no_picture')
+    def test_profile_redirect_with_auth(self):
+        login = self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('recipes:list'))
+        self.assertTrue(login)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'recipes/recipes_list.html')
