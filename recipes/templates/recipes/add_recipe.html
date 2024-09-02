@@ -1,42 +1,35 @@
 {% load static %}
+{% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Records</title>
+    <title>List</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
-
+</head>
+<body>
     <div class="navbar">
         <a href="{% url 'recipes:home' %}" class="logo">MyWebsite</a>
             <a href="{% url 'recipes:about' %}">About</a>
             <a href="{% url 'recipes:list' %}">Recipes</a>
-            <a href="{% url 'recipes:add_recipe' %}">Add Recipe</a>
 
+            <a href="{% url 'recipes:records' %}">Search</a>
             <div class = "log">
             <a  href="{% url 'logout' %}">Logout</a>
             </div>
         
 </div>
-<h2> Search for sales records</h2>
-
-<hr>
-<form action="" method="POST">
-    {% csrf_token %}
-    {{form}}
-    <button type="submit" >search</button>
-
-</form>
-
-
-<br>
-
-{% if name_df %}
-    {{ name_df|safe }}
-    
-    <br>
-    <h2><a href="{{ recipe.get_absolute_url }}">{{ recipe.name }}</a></a></h2>
-    <img src="data:image/png;base64,{{ chart|safe }}" alt="Chart">
-{% else %}
-   
-{% endif %}
+    {% block content %}
+    <div class="form-container">
+        <h2>Add a New Recipe</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+        
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    {% endblock %}
+</body>
+</html>

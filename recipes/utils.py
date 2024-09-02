@@ -54,10 +54,12 @@ def get_chart(chart_type, data, **kwargs):
     fig = plt.figure(figsize=(6, 3))
 
     if chart_type == '#1':
-        plt.bar(data['name'], data['ingredient_count'])
-        plt.xlabel('Recipe Name')
+        
+        plt.bar(data['cooking_time'], data['ingredient_count'], color=['#66B2FF'])
+        
+        plt.xlabel('Cooking time')
         plt.ylabel('Number of Ingredients')
-        plt.show()
+        
 
     elif chart_type == '#2':
         # Define the buckets
@@ -75,16 +77,17 @@ def get_chart(chart_type, data, **kwargs):
         plt.pie(values, labels=labels, autopct='%1.1f%%', colors=['#FF9999', '#66B2FF', '#99FF99'])
         plt.title('Recipes by Cooking Time')
     elif chart_type == '#3':
-        plt.plot(data['name'], data['cooking_time'])
-        plt.show()
-
+        plt.plot(data['name'], data['cooking_time'], color='#FF9999')
+        plt.xlabel('Recipe Name')
+        plt.ylabel('Cooking Time')
+        plt.xticks(rotation=30, ha='right')
     else:
         print('Unknown chart type')
 
     plt.tight_layout()
 
     chart = get_graph()
-    print(f"Generated Chart: {chart[:100]}...")  # Print first 100 characters of the base64 string
+    
     return chart
 
 

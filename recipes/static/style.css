@@ -1,0 +1,172 @@
+h1 {
+    color: light rgb(192, 168, 192);
+    text-align: center;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 75px
+    }
+h2 {font-family: cursive;
+    color: purple
+    ;
+}
+
+.image {
+    text-align: center;
+}
+.show-list{
+    text-align: center
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+.navbar {
+    background-color: #c17cca;
+    overflow: hidden;
+}
+.navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+.navbar .logo {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.about{
+    text-align: center;
+}
+
+a{
+    font-size:18px;
+}
+
+/* Form container styles */
+.card-image{
+    width: 150px;
+    height: 150px;
+}
+
+.form-container {
+    justify-content: center;
+    min-height: 80vh; /* Adjust the height as needed */
+    margin: 20px;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px; /* Adjust the width as needed */
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+}
+
+.form-container button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+button{
+    width: 100px;
+    height: 50px;
+}
+
+.card {
+    /* Add shadows to create the "card" effect */
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    margin: 5px;
+    margin-top: 20px;
+  }
+  
+  /* On mouse-over, add a deeper shadow */
+  .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+  
+  /* Add some padding inside the card container */
+  .container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 80px;
+    padding: 16px 16px;
+ 
+  }
+
+  .cardimage{
+    width: 200px;
+    height: 200px;
+  }
+
+  .recipetitle{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+table  {
+    margin-left: auto;
+    margin-right: auto;
+    padding-block: 65px;
+    border: 25px dotted;
+    color: #c17cca;
+    gap: 100px;
+    
+}
+
+.log{
+    float: right;
+}
+
+.above{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: center;
+    border-radius: 5%;
+}
+.corner{
+    
+    background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("/static/recipes/images/marble.jpg");
+    
+    padding: 50px;
+   
+
+}
+
+.below{
+    opacity: 100%;
+    background-color: white;
+    padding: 150px;
+}
+.list{
+    background-color: white;
+    padding: 100px;
+    gap: 100px;
+}
+
+.git{
+    width:75px;
+    height:75px;
+}
