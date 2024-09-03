@@ -70,11 +70,11 @@ class UserAuthTest(TestCase):
         cls.client = Client()
         cls.user = User.objects.create_user(username='testuser', password='testpassword')
 
-    def test_profile_redirect_without_auth(self):
+    def test_list_redirect_without_auth(self):
         response = self.client.get(reverse('recipes:list'))
         self.assertRedirects(response, f'/login/?next={reverse("recipes:list")}')
     
-    def test_profile_redirect_with_auth(self):
+    def test_list_redirect_with_auth(self):
         login = self.client.login(username='testuser', password='testpassword')
         response = self.client.get(reverse('recipes:list'))
         self.assertTrue(login)
